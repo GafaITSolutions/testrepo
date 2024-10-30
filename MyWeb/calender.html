@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bumble's Family 25th Anniversary Invitation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form, .confirmation-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #555;
+        }
+        .confirmation-card img {
+            max-width: 100%;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>Bumble's Family 25th Anniversary Invitation</h1>
+        <form id="rsvpForm">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" required>
+
+            <label for="emailAddress">Email Address:</label>
+            <input type="email" id="emailAddress" name="emailAddress" required>
+
+            <label for="attendees">Number of Attendees:</label>
+            <input type="number" id="attendees" name="attendees" required min="1">
+
+            <label for="arrivalTime">Arrival Time:</label>
+            <input type="time" id="arrivalTime" name="arrivalTime" required>
+
+            <label for="menuPreference">Menu Preference:</label>
+            <select id="menuPreference" name="menuPreference" required>
+                <option value="">Select an option</option>
+                <option value="vegan">Vegan</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="non-vegetarian">Non-vegetarian</option>
+            </select>
+
+            <label for="tableOption">Seating Table Option:</label>
+            <select id="tableOption" name="tableOption" required>
+                <option value="">Select an option</option>
+                <option value="table1">Table 1</option>
+                <option value="table2">Table 2</option>
+                <option value="table3">Table 3</option>
+                <option value="table4">Table 4</option>
+            </select>
+
+            <button type="submit">Submit RSVP</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('rsvpForm');
+            const mainContainer = document.getElementById('mainContainer');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (validateForm()) {
+                    saveToLocalStorage();
+                    showConfirmation();
+                }
+            });
+
+            function validateForm() {
+                let isValid = true;
+                const inputs = form.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '#ddd';
+                    }
+                });
+                return isValid;
+            }
+
+            function saveToLocalStorage() {
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    phoneNumber: document.getElementById('phoneNumber').value,
+                    emailAddress: document.getElementById('emailAddress').value,
+                    attendees: document.getElementById('attendees').value,
+                    arrivalTime: document.getElementById('arrivalTime').value,
+                    menuPreference: document.getElementById('menuPreference').value,
+                    tableOption: document.getElementById('tableOption').value
+                };
+                localStorage.setItem('rsvpData', JSON.stringify(formData));
+            }
+
+            function showConfirmation() {
+                const rsvpData = JSON.parse(localStorage.getItem('rsvpData'));
+                mainContainer.innerHTML = `
+                    <h1>Thank you for your RSVP</h1>
+                    <div class="confirmation-card">
+                        <h2>Here is your Confirmation Card:</h2>
+                        <img src="https://via.placeholder.com/150" alt="Mr. and Mrs. Bumble">
+                        <p><strong>Full Name:</strong> ${rsvpData.fullName}</p>
+                        <p><strong>Phone Number:</strong> ${rsvpData.phoneNumber}</p>
+                        <p><strong>Email:</strong> ${rsvpData.emailAddress}</p>
+                        <p><strong>Number of Attendees:</strong> ${rsvpData.attendees}</p>
+                        <p><strong>Arrival Time:</strong> ${rsvpData.arrivalTime}</p>
+                        <p><strong>Menu Preference:</strong> ${rsvpData.menuPreference}</p>
+                        <p><strong>Table Option:</strong> ${rsvpData.tableOption}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
